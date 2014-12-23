@@ -10,6 +10,8 @@ var gulp = require('gulp'),
 var sassSources = ['components/sass/style.scss'];
 var coffeeSources = ['components/coffee/tagline.coffee'];
 var jsSources = ['components/scripts/*.js'];
+var htmlSources = ['builds/development/*.html'];
+var jsonSources = ['builds/development/js/*.json']
 
 gulp.task('log', function(){
     gutil.log('Workflows are awesom');
@@ -48,6 +50,8 @@ gulp.task('watch' , function (){
     gulp.watch(coffeeSources, ['coffee']);
     gulp.watch(jsSources , ['js']);
     gulp.watch('components/sass/*.scss' , ['compass']);
+    gulp.watch(htmlSources , ['html']);
+    gulp.watch(jsonSources , ['json']);
 });
 
 gulp.task('connect' , function(){
@@ -57,4 +61,14 @@ gulp.task('connect' , function(){
     });
 });
 
-gulp.task('default' , ['coffee', 'js' , 'compass', 'connect' , 'watch' ]);
+gulp.task('html' , function(){
+    gulp.src(htmlSources)
+        .pipe(connect.reload())
+});
+
+gulp.task('json' , function(){
+    gulp.src(jsonSources)
+        .pipe(connect.reload())
+});
+
+gulp.task('default' , ['coffee', 'js' , 'compass', 'connect' , 'html', 'json' ,'watch' ]);

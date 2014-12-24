@@ -7,7 +7,8 @@ var gulp = require('gulp'),
     connect = require('gulp-connect'),
     gulpif = require('gulp-if'),
     uglify = require('gulp-uglify'),
-    miniHtml = require('gulp-minify-html')
+    miniHtml = require('gulp-minify-html'),
+    miniJson = require('gulp-jsonminify')
 ;
 
 var env, 
@@ -74,7 +75,7 @@ gulp.task('watch' , function (){
     gulp.watch(jsSources , ['js']);
     gulp.watch('components/sass/*.scss' , ['compass']);
     gulp.watch('builds/developlment/*.html' , ['html']);
-    gulp.watch(jsonSources , ['json']);
+    gulp.watch('builds/development/js/*.json' , ['json']);
 });
 
 gulp.task('connect' , function(){
@@ -92,7 +93,9 @@ gulp.task('html' , function(){
 });
 
 gulp.task('json' , function(){
-    gulp.src(jsonSources)
+    gulp.src('builds/development/js/*.json')
+        .pipe(gulpif( env === 'production', miniJson()))
+        .pipe(gulpif( env === 'production', gulp.dest('builds/production/js')))
         .pipe(connect.reload())
 });
 
